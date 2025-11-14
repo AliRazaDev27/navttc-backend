@@ -22,7 +22,7 @@ app.use(morgan('dev'));
 
 app.get('/', (request, response) => {
   const backendInfo = `
-    Backend Information:
+    Backend Information - Urwa:
     - This is a simple Express.js backend for the NAVTTC course.
     - It provides basic API functionalities for managing products and users.
 
