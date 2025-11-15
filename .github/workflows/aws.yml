@@ -78,7 +78,7 @@ jobs:
 
       - name: Render new task definition
         id: render-new-task-definition
-        uses: aws-actions/amazon-ecs-render-task-definition@v2
+        uses: aws-actions/amazon-ecs-render-task-definition@v1.8.1
         with:
           # Use the file we just downloaded from AWS
           task-definition: task-definition-from-aws.json
