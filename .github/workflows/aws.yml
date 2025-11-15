@@ -77,21 +77,18 @@ jobs:
             --query taskDefinition > task-definition-from-aws.json
 
       - name: Render new task definition
-        id: render-task
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        id: render-new-task-definition
+        uses: aws-actions/amazon-ecs-render-task-definition@v1.8.1
         with:
           # Use the file we just downloaded from AWS
           task-definition: task-definition-from-aws.json
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image_uri }}
-          
-          # This creates a new file: task-definition-out.json
-          output-file: task-definition-out.json 
 
       - name: Deploy new task definition to Amazon ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
-          task-definition: task-definition-out.json # The file from the previous step
+          task-definition: ${{ steps.render-new-task-definition.outputs.task-definition }} # The file from the previous step
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true # Waits for the deployment to complete
