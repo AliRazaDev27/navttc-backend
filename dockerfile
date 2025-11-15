@@ -29,10 +29,7 @@ COPY --from=builder /app/dist ./dist
 # Expose your backend port
 EXPOSE 3000
 
-ARG MONGO_URL
-ARG JWT_SECRET
-ENV MONGO_URL=$MONGO_URL
-ENV JWT_SECRET=$JWT_SECRET
+ENV NODE_ENV=production
 
 # Start the server
 CMD ["node", "dist/index.js"]

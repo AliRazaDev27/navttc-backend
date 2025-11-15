@@ -9,7 +9,8 @@ import morgan from 'morgan';
 import cors from 'cors';
 
 const app = express()
-const port = 3000
+const port = 3000;
+const HOST =process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
 
 config();
 db();
@@ -47,6 +48,6 @@ app.use("/auth", authRouter);
 app.use("/products", productRouter);
 app.use("/users", userRouter);
 
-app.listen(port, () => {
+app.listen(port,HOST, () => {
   console.log(`Example app listening on port ${port}`)
 })
