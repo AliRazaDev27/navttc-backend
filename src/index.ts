@@ -49,5 +49,5 @@ app.use("/products", productRouter);
 app.use("/users", userRouter);
 
 app.listen(port,HOST, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Example app listening on ${HOST} & port ${port}`)
 })
