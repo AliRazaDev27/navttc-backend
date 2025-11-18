@@ -88,8 +88,25 @@ const getProductsByCat = async (request: Request, response: Response) => {
 // Create a new product
 const createProduct = async (request: Request, response: Response) => {
   try {
-    const productData = request.body;
-    const savedProduct = await productModel.create(productData);
+    const {title,description,price,discountPercentage,brand,category,tags,variants,rating,numReviews} = request.body;
+    const baseURL = request.protocol + '://' + request.get('host') + '/';
+    const thumbnail = request.files && baseURL+(request.files as Express.Multer.File[])[0]?.path;
+    const images = request.files ? (request.files as Express.Multer.File[]).map(file => baseURL+file.path) : [];
+    const slug = title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+    const savedProduct = await productModel.create({
+      title,
+      slug,
+      description,
+      price,
+      discountPercentage,
+      brand,
+      category,
+      tags,
+      variants: JSON.parse(variants),
+      rating,
+      numReviews,
+      thumbnail,
+      images});
     return response.status(201).json({
       success: true,
       message: "Product created successfully",

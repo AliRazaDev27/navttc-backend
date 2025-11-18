@@ -105,6 +105,6 @@ productSchema.index({ slug: 1 });
 productSchema.index({ category: 1 });
 productSchema.index({ 'variants.stock': 1 }); // To quickly find in-stock items
 
-const Product = mongoose.models.Product || mongoose.model('Product', productSchema);
+const Product = mongoose.model('Product', productSchema);
 
 export default Product;
