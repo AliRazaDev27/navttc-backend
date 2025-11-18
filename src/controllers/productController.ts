@@ -141,11 +141,67 @@ const deleteProduct = async (request: Request, response: Response) => {
   }
 };
 
+// Search products by name, category, or brand
+const searchProducts = async (request: Request, response: Response) => {
+  try {
+    const query = request.query.q as string;
+    if (!query) {
+      return response.status(400).json({
+        success: false,
+        message: "Search query is required",
+      });
+    }
+    const products = await productModel.find({
+      $or: [
+        { name: { $regex: query, $options: "i" } },
+        { category: { $regex: query, $options: "i" } },
+        { brand: { $regex: query, $options: "i" } },
+      ],
+    });
+    return response.status(200).json({
+      success: true,
+      message: `Products matching query "${query}" retrieved successfully`,
+      data: products,
+    });
+  } catch (error: unknown) {
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error("Search Products Error:", errMsg);
+    return response.status(500).json({
+      success: false,
+      message: "Error searching products",
+      error: errMsg,
+    });
+  }
+};
+
+// Get 10 new arrival products from the most recently added products
+const getNewArrivals = async (request: Request, response: Response) => {
+  try {
+    const products = await productModel.find().sort({ createdAt: -1 }).limit(10);
+    return response.status(200).json({
+      success: true,
+      message: "New arrival products retrieved successfully",
+      data: products,
+    });
+  } catch (error: unknown) {
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error("Get New Arrivals Error:", errMsg);
+    return response.status(500).json({
+      success: false,
+      message: "Error retrieving new arrival products",
+      error: errMsg,
+    });
+  }
+}; 
+
+// Exporting the controller functions
 export {
   getSingleProduct,
   getProducts,
   createProduct,
   getProductsByCat,
   deleteProduct,
+  searchProducts,
+  getNewArrivals
 };
 

@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const productSchema = new Schema({
-    name: String,
+    title: String,
     price: Number,
     discount: Number,
     description: String,
@@ -13,8 +13,7 @@ const productSchema = new Schema({
     color: [String],
     brand: String,
     images: [String],
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now }    
-});
+},{ timestamps: true });
 
 export default mongoose.model('Product', productSchema);
+
