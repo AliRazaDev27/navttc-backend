@@ -2,7 +2,7 @@ import express from 'express'
 import productRouter from "./routes/productRoute.js";
 import userRouter from "./routes/userRoute.js";
 import authRouter from "./routes/authRoute.js";
-import { config } from 'dotenv';
+import dotenv from 'dotenv';
 import db from './config/db.js';
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan';
@@ -12,7 +12,7 @@ const app = express()
 const port = 3000;
 const HOST =process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
 
-config();
+dotenv.config();
 db();
 
 app.use(cors())

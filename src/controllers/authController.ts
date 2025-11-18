@@ -18,10 +18,10 @@ export const session = (req:Request,res:Response)=>{
 export const signin = (req:Request,res:Response)=>{
   try{
     const {username,password} = req.body;
-  if(req.body.email !== "ADMIN@ADMIN"){
+  if(username !== "ADMIN@ADMIN"){
     throw new Error("User not found");
   }
-  if(req.body.password !== "ROOT"){
+  if(password !== "ROOT"){
     throw new Error("Invalid password");
   }
   const token = jwt.sign({id:1,username,isAdmin:true},process.env.JWT_SECRET as string,{expiresIn:"7d"});
