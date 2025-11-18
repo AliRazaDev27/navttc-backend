@@ -7,7 +7,7 @@ const productSchema = new Schema({
     discount: Number,
     description: String,
     category: String,
-    collection: [String], //clothing styles like: casual, formal, gym wear etc
+    collection: String, //clothing styles like: casual, formal, gym wear etc
     rating: Number,
     size: [String],
     color: [String],

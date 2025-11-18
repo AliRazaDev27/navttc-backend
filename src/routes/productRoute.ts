@@ -6,7 +6,7 @@ app.get('/', getProducts)
 app.get('/:id', getSingleProduct);
 app.get('/category/:cat', getProductsByCat);
 app.post('/', createProduct);
-app.post('/', deleteProduct)
+app.delete('/', deleteProduct)
 
 
 export default app;
