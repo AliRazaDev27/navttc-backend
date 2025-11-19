@@ -15,7 +15,11 @@ const HOST =process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
 dotenv.config();
 db();
 
-app.use(cors())
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  credentials: true,
+  optionsSuccessStatus: 200,
+}))
 app.use('/public',express.static('public'))
 app.use(cookieParser())
 app.use(express.json());
