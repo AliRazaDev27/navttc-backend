@@ -12,7 +12,7 @@ import productModel from './models/productModel.js';
 const app = express()
 const port = 3000;
 const HOST =process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
-const FRONTEND_URL = process.env.NODE_ENV === 'production' ? 'https://navttc.vercel.app' : 'http://localhost:5173';
+const FRONTEND_URL = process.env.NODE_ENV === 'production' ? 'https://navttc-jade.vercel.app/' : 'http://localhost:5173';
 
 dotenv.config();
 db();
