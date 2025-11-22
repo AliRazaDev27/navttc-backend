@@ -12,6 +12,7 @@ import productModel from './models/productModel.js';
 const app = express()
 const port = 3000;
 const HOST =process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
+const FRONTEND_URL = process.env.NODE_ENV === 'production' ? 'https://navttc.vercel.app' : 'http://localhost:5173';
 
 dotenv.config();
 db();
@@ -19,7 +20,7 @@ db();
 app.set('trust proxy', 1) // trust first proxy
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: FRONTEND_URL,
   credentials: true,
   optionsSuccessStatus: 200,
 }))
