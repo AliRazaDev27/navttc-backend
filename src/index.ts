@@ -7,6 +7,7 @@ import db from './config/db.js';
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan';
 import cors from 'cors';
+import productModel from './models/productModel.js';
 
 const app = express()
 const port = 3000;
@@ -14,6 +15,8 @@ const HOST =process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
 
 dotenv.config();
 db();
+
+app.set('trust proxy', 1) // trust first proxy
 
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',

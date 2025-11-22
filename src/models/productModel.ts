@@ -101,7 +101,6 @@ productSchema.virtual('totalStock').get(function() {
 
 // INDEXES (For fast searching/filtering)
 productSchema.index({ title: 'text', description: 'text', tags: 'text' }); // Enable search
-productSchema.index({ slug: 1 });
 productSchema.index({ category: 1 });
 productSchema.index({ 'variants.stock': 1 }); // To quickly find in-stock items
 
