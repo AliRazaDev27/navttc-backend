@@ -30,7 +30,7 @@ export const signin = async(req: Request, res: Response) => {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "none",
     }).status(200).json({ success: true, error: null });
   }
   catch (error: any) {
