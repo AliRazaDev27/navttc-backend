@@ -262,6 +262,37 @@ const deleteProduct = async (request: Request, response: Response) => {
   }
 };
 
+export const getProductMetadata = async (req: Request, res: Response) => {
+  try{
+    // get all distinct categories,subCategories, brands, colors, sizes & tags
+    console.log("Fetching product metadata...");
+    const categories = await Product.distinct('category');
+    const subCategories = await Product.distinct('subCategory');
+    const brands = await Product.distinct('brand');
+    const colors = await Product.distinct('variants.color');
+    const colorCode = await Product.distinct('variants.colorCode');
+    const sizes = await Product.distinct('variants.size');
+    res.status(200).json({
+      success: true,
+      data: {
+        categories,
+        subCategories,
+        brands,
+        colors,
+        colorCode,
+        sizes,
+      },
+    });
+  }catch(error:any){
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: 'Server Error',
+      error: error.message,
+    });
+  }
+}
+
 export {
   getSingleProduct,
   getProducts,
