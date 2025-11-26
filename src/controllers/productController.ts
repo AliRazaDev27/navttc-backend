@@ -25,17 +25,23 @@ const getProducts = async (req:Request<{},{},{},ProductQueryParams>, res:Respons
     const {
       search,
       page = 1,
-      limit = 10,
+      limit = 12,
       minPrice,
       maxPrice,
       category,
       subCategory,
       brand,
-      colors, // Expecting "Red,Blue"
+      colors, // Expecting colorCodes "#FF0000,#0000FF"
       sizes,  // Expecting "M,XL"
       sort,
       inStock // Optional: "true" to only show available items
     } = req.query;
+
+    let colorCodes = ""
+    if(colors){
+    colorCodes = decodeURIComponent(colors);
+    console.log("Decoded color codes:", colorCodes);
+    }
 
     // 2. Initialize the Filter Object with Mongoose Type
     // FilterQuery<IProduct> ensures we can't filter by fields that don't exist in IProduct
@@ -67,9 +73,9 @@ const getProducts = async (req:Request<{},{},{},ProductQueryParams>, res:Respons
     // Note: TypeScript might complain about string keys for nested paths 
     // if StrictQuery is on, but this is valid Mongoose syntax.
     
-    if (colors) {
-      const colorList = colors.split(',');
-      (filter as any)['variants.color'] = { $in: colorList };
+    if (colorCodes) {
+      const colorList = colorCodes.split(',');
+      (filter as any)['variants.colorCode'] = { $in: colorList };
     }
 
     if (sizes) {
