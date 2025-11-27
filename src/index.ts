@@ -8,6 +8,10 @@ import cookieParser from 'cookie-parser'
 import morgan from 'morgan';
 import cors from 'cors';
 import orderRouter from './routes/orderRoute.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+ const __filename = fileURLToPath(import.meta.url);
+ const __dirname = path.dirname(__filename);
 
 const app = express()
 const port = 3000;
@@ -24,7 +28,7 @@ app.use(cors({
   credentials: true,
   optionsSuccessStatus: 200,
 }))
-app.use('/public',express.static('public'))
+app.use('/public',express.static(path.join(__dirname, '../public')))
 app.use(cookieParser())
 app.use(express.json());
 app.use(morgan('dev'));

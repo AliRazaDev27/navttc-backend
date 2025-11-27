@@ -26,6 +26,8 @@ RUN npm install --production
 # Copy compiled JS from builder stage
 COPY --from=builder /app/dist ./dist
 
+COPY --from=builder /app/public ./public
+
 # Expose your backend port
 EXPOSE 3000
 
