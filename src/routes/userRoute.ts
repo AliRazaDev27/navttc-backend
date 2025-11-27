@@ -1,10 +1,9 @@
 import express from "express";
+import { getAllUsers } from "../controllers/userController.js";
 
 const app = express.Router();
 
-app.get('/', (request, response) => {
-  response.send('All users fetched')
-})
+app.get('/', getAllUsers);
 
 app.get('/:id', (request, response) => {
   const id = request.params.id

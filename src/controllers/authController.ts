@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt"
 import userModel from "../models/userModel.js";
 
-export const session = (req: Request, res: Response) => {
+export const session = async(req: Request, res: Response) => {
   try {
     const token = req.cookies.token;
     if (!token) {
@@ -11,7 +11,11 @@ export const session = (req: Request, res: Response) => {
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
     const user = decoded as { id: string; email: string; role: string };
-    res.status(200).json({ success: true, data: user, error: null });
+    const userDB = await userModel.findById(user.id).select("-password");
+    if (!userDB) {
+      throw new Error("User not found");
+    }
+    res.status(200).json({ success: true, data: userDB, error: null });
   }
   catch (error: any) {
     res.status(401).json({ success: false, data: null, error: error.message });

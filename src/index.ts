@@ -7,7 +7,7 @@ import db from './config/db.js';
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan';
 import cors from 'cors';
-import productModel from './models/productModel.js';
+import orderRouter from './routes/orderRoute.js';
 
 const app = express()
 const port = 3000;
@@ -54,6 +54,7 @@ app.get('/', (request, response) => {
 app.use("/auth", authRouter);
 app.use("/products", productRouter);
 app.use("/users", userRouter);
+app.use("/orders", orderRouter);
 
 app.listen(port,HOST, () => {
   console.log(`Example app listening on ${HOST} & port ${port}`)

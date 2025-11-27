@@ -135,25 +135,25 @@ const getProducts = async (req:Request<{},{},{},ProductQueryParams>, res:Respons
 // Get a single product by ID
 const getSingleProduct = async (request: Request, response: Response) => {
   try {
-    const productId = request.params?.id;
-    if (!productId) {
+    const productSlug = request.params?.slug;
+    if (!productSlug) {
       return response.status(400).json({
         success: false,
         message: "Product id is required",
       });
     }
 
-    const product = await Product.findById(productId);
+    const product = await Product.findOne({ slug: productSlug });
     if (!product) {
       return response.status(404).json({
         success: false,
-        message: `Product with id ${productId} not found`,
+        message: `Product ${productSlug} not found`,
       });
     }
 
     return response.status(200).json({
       success: true,
-      message: `Product with id ${productId} retrieved successfully`,
+      message: "Product retrieved successfully",
       data: product,
     });
   } catch (error: unknown) {
@@ -298,6 +298,88 @@ export const getProductMetadata = async (req: Request, res: Response) => {
     });
   }
 }
+
+export const updateProduct = async (request: Request, response: Response) => {
+  try{
+    const productId = request.params?.id;
+    if (!productId) {
+      return response.status(400).json({
+        success: false,
+        message: "Product id is required",
+      });
+    }
+    if(request.files && (request.files as Express.Multer.File[]).length > 0){
+      const images = (request.files as Express.Multer.File[]).map(file => file.path);
+      request.body.images = images;
+    }
+    const oldImages = (await Product.findById(productId))?.images || [];
+    if(oldImages.length > 0){
+      request.body.images = [...oldImages,...(request.body.images || [])];
+    }
+    const updatedProduct = await Product.findByIdAndUpdate(productId, request.body, { new: true });
+    if (!updatedProduct) {
+      return response.status(404).json({
+        success: false,
+        message: `Product with id ${productId} not found`,
+      });
+    }
+    return response.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      data: updatedProduct,
+    });
+  }
+  catch(error:unknown){
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error("Update Product Error:", errMsg);
+    return response.status(500).json({
+      success: false,
+      message: "Error updating product",
+      error: errMsg,
+    });
+  }
+}
+
+export const deleteProductImage = async (request: Request, response: Response) => {
+  try {
+    const productId = request.params?.id;  
+    const image = request.params?.image;
+    if(!image) throw new Error("Image URL is required");
+    const imageToDelete = decodeURIComponent(image);
+    if (!productId || !imageToDelete) {
+      return response.status(400).json({
+        success: false,
+        message: "Product id and image url is required",
+      });
+    }
+    const product = await Product.findById(productId);
+    if (!product) {
+      return response.status(404).json({
+        success: false,
+        message: `Product with id ${productId} not found`,
+      });
+    }
+    const images = product.images.filter(image => image !== imageToDelete);
+    product.images = images;
+    await product.save();
+    // delete image from uploads folder
+    const fs = await import('fs');
+    const path = imageToDelete.replace(request.protocol + '://' + request.get('host') + '/', '');
+    fs.unlinkSync(path);
+    return response.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+    });
+  } catch (error: unknown) {
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error("Delete Product Error:", errMsg);
+    return response.status(500).json({
+      success: false,
+      message: "Error deleting product",
+      error: errMsg,
+    });
+}
+};
 
 export {
   getSingleProduct,
