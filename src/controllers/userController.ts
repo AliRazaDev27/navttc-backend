@@ -8,3 +8,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
         res.status(400).json({status:false,data:[]})
     }
 }
+
+export const getSingleUser = async (req: Request, res: Response) => {}
+export const updateUser = async (req: Request, res: Response) => {}
+export const deleteUser = async (req: Request, res: Response) => {}
